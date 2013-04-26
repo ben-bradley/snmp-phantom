@@ -1,10 +1,10 @@
 var snmp = require ("net-snmp"),
-		fs = require('fs'),
-		session = snmp.createSession (target, community, {version: version});
+		fs = require('fs');
 
 var target = process.argv[2],
 		community = process.argv[3],
 		version = (process.argv[4] == "2c") ? snmp.Version2c : snmp.Version1,
+		session = snmp.createSession (target, community, {version: version}),
 		oid = '1.3.6.1',
 		maxRepetitions = 5,
 		MIB = [];
@@ -24,7 +24,7 @@ function feedCb (varbinds) {
 		}
 		else {
 			var type = varbinds[i].type;
-			if (type == 4 || type == 64) { varbinds[i].value = varbinds[i].value.toString(); }
+			if (type == 4 || type == 6 || type == 64) { varbinds[i].value = varbinds[i].value.toString(); }
 			else { varbinds[i].value = Number(varbinds[i].value.toString()); }
 			MIB.push(varbinds[i]);
 		}
